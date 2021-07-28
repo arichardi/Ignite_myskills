@@ -3,13 +3,29 @@ import { FlatList, StyleSheet, Text, TextInput,  View, StatusBar } from 'react-n
 import AppButton from '../components/AppButton';
 import SkillCard from '../components/SkillCard';
 
+    interface SkillData {
+      id: string;
+      name: string;
+    }
+
+
 export default function HomeScreen() {
 
     const [newSkill, setNewSkill] = useState('')
-    const [myskills, setMySkills] = useState([])
+    const [myskills, setMySkills] = useState<SkillData[]>([])
 
     function handleAddNewSkill(){
-        setMySkills([...myskills, newSkill])
+      const data ={
+        id: String(new Date().getTime()),
+        name: newSkill
+      }
+
+        setMySkills([...myskills, data])
+    }
+
+    function handleRemoveSkill(skill){
+      const newList = myskills.filter( (item) => item.id != skill)
+      setMySkills(newList)
     }
 
   return (
@@ -25,15 +41,19 @@ export default function HomeScreen() {
 
         <AppButton 
             onPress={handleAddNewSkill}
+            title='Add'
         />
 
         <Text style={[styles.title, { marginVertical: 16,}]} >Skills</Text>
         
         <FlatList 
             data={myskills}
-            keyExtractor={ item => item}
+            keyExtractor={ item => item.id}
             renderItem={ ({item}) => 
-            <SkillCard key={item} skill={item}/>
+            <SkillCard 
+            skill={item.name}
+            onPress={ () => handleRemoveSkill(item.id)}
+            />
         }
         />
         </View>
