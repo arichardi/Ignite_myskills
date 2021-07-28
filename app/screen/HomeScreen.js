@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { FlatList, StyleSheet, Text, TextInput,  View, StatusBar } from 'react-native';
 import AppButton from '../components/AppButton';
-import SkillCard from '../components/skillCard';
+import SkillCard from '../components/SkillCard';
 
 export default function HomeScreen() {
 
@@ -14,6 +14,7 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
+        <StatusBar barStyle='light-content' />
         <Text style={styles.title} >Welcome, Andre</Text>
         <TextInput 
             style={styles.input}
@@ -28,8 +29,14 @@ export default function HomeScreen() {
 
         <Text style={[styles.title, { marginVertical: 16,}]} >Skills</Text>
         
-        {myskills.map( skill => <SkillCard key={skill} skill={skill}/> )}
-    </View>
+        <FlatList 
+            data={myskills}
+            keyExtractor={ item => item}
+            renderItem={ ({item}) => 
+            <SkillCard key={item} skill={item}/>
+        }
+        />
+        </View>
   );
 }
 
